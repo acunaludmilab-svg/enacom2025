@@ -3,91 +3,54 @@
    Interactividad, idiomas, accesibilidad, carrusel y quiz
 ========================================================= */
 
-
 /* =========================================================
    ACORDEÓN
 ========================================================= */
 
-const accordionButtons =
-  document.querySelectorAll(".subthread-button");
+const accordionButtons = document.querySelectorAll(".subthread-button");
 
 accordionButtons.forEach((button) => {
-
   button.addEventListener("click", () => {
-
     const article = button.closest(".subthread");
 
     if (!article) return;
 
-    const content =
-      article.querySelector(".subthread-content");
+    const content = article.querySelector(".subthread-content");
 
     if (!content) return;
 
-    const isOpen =
-      article.classList.contains("open");
+    const isOpen = article.classList.contains("open");
 
     article.classList.toggle("open");
 
-    button.setAttribute(
-      "aria-expanded",
-      String(!isOpen)
-    );
+    button.setAttribute("aria-expanded", String(!isOpen));
 
     if (!isOpen) {
-
-      content.style.maxHeight =
-        content.scrollHeight + "px";
-
+      content.style.maxHeight = content.scrollHeight + "px";
     } else {
-
       content.style.maxHeight = "0px";
-
     }
-
   });
-
 });
 
+document.querySelectorAll(".subthread.open").forEach((article) => {
+  const content = article.querySelector(".subthread-content");
 
-/* Abrir correctamente los acordeones que ya están abiertos */
+  if (!content) return;
 
-document
-  .querySelectorAll(".subthread.open")
-  .forEach((article) => {
-
-    const content =
-      article.querySelector(".subthread-content");
-
-    if (!content) return;
-
-    content.style.maxHeight =
-      content.scrollHeight + "px";
-
-  });
-
-
+  content.style.maxHeight = content.scrollHeight + "px";
+});
 
 /* =========================================================
    CARRUSEL
 ========================================================= */
 
-const slides =
-  document.querySelectorAll(".carousel-slide");
-
-const prevButton =
-  document.querySelector(".carousel-control.prev");
-
-const nextButton =
-  document.querySelector(".carousel-control.next");
-
-const dotsContainer =
-  document.querySelector(".carousel-dots");
+const slides = document.querySelectorAll(".carousel-slide");
+const prevButton = document.querySelector(".carousel-control.prev");
+const nextButton = document.querySelector(".carousel-control.next");
+const dotsContainer = document.querySelector(".carousel-dots");
 
 let currentSlide = 0;
-
-
-/* Solo activar el carrusel si existe */
 
 if (
   slides.length > 0 &&
@@ -95,16 +58,10 @@ if (
   prevButton &&
   nextButton
 ) {
-
-  /* Crear indicadores */
-
   slides.forEach((slide, index) => {
-
-    const dot =
-      document.createElement("button");
+    const dot = document.createElement("button");
 
     dot.className = "carousel-dot";
-
     dot.type = "button";
 
     dot.setAttribute(
@@ -113,135 +70,90 @@ if (
     );
 
     dot.addEventListener("click", () => {
-
       showSlide(index);
-
     });
 
     dotsContainer.appendChild(dot);
-
   });
 
-
-  const dots =
-    document.querySelectorAll(".carousel-dot");
-
+  const dots = document.querySelectorAll(".carousel-dot");
 
   function showSlide(index) {
-
     if (!slides.length) return;
 
     if (index < 0) {
-
       index = slides.length - 1;
-
     }
 
     if (index >= slides.length) {
-
       index = 0;
-
     }
 
     currentSlide = index;
 
-
     slides.forEach((slide, i) => {
-
       slide.classList.toggle(
         "active",
         i === currentSlide
       );
-
     });
 
-
     dots.forEach((dot, i) => {
-
       dot.classList.toggle(
         "active",
         i === currentSlide
       );
-
     });
-
   }
 
-
   prevButton.addEventListener("click", () => {
-
     showSlide(currentSlide - 1);
-
   });
-
 
   nextButton.addEventListener("click", () => {
-
     showSlide(currentSlide + 1);
-
   });
-
 
   showSlide(0);
 
+  let carouselTimer = null;
 
-  /* Carrusel automático */
+  function startCarousel() {
+    if (carouselTimer) {
+      clearInterval(carouselTimer);
+    }
 
-  let carouselTimer =
-    setInterval(() => {
-
+    carouselTimer = setInterval(() => {
       showSlide(currentSlide + 1);
-
     }, 6500);
-
-
-  /* Pausar al pasar el mouse */
-
-  const carousel =
-    document.querySelector(".carousel");
-
-  if (carousel) {
-
-    carousel.addEventListener(
-      "mouseenter",
-      () => clearInterval(carouselTimer)
-    );
-
-
-    carousel.addEventListener(
-      "mouseleave",
-      () => {
-
-        carouselTimer =
-          setInterval(() => {
-
-            showSlide(currentSlide + 1);
-
-          }, 6500);
-
-      }
-    );
-
   }
 
+  function stopCarousel() {
+    if (carouselTimer) {
+      clearInterval(carouselTimer);
+      carouselTimer = null;
+    }
+  }
+
+  startCarousel();
+
+  const carousel = document.querySelector(".carousel");
+
+  if (carousel) {
+    carousel.addEventListener("mouseenter", stopCarousel);
+    carousel.addEventListener("mouseleave", startCarousel);
+  }
 }
-
-
 
 /* =========================================================
    IDIOMAS
 ========================================================= */
 
 const translations = {
-
   es: {
-
     navEjes: "Ejes temáticos",
-
     navPonencias: "Ponencias",
-
     navInteractivo: "Participá",
-
     navRedes: "Redes",
 
     kicker:
@@ -253,11 +165,8 @@ const translations = {
     heroText:
       "Un recorrido por los principales debates, ponencias y producciones del ENACOM 2025, realizado en San Luis.",
 
-    heroGallery:
-      "Ver fotografías",
-
-    heroExplore:
-      "Explorar el encuentro",
+    heroGallery: "Ver fotografías",
+    heroExplore: "Explorar el encuentro",
 
     heroImageCaption:
       "Producciones desarrolladas a partir de los debates y problemáticas abordadas durante el encuentro.",
@@ -269,41 +178,33 @@ const translations = {
     countdownSeconds: "Segundos",
     countdownComplete: "El ENACOM 2026 ya comenzó.",
 
-    galleryKicker:
-      "El encuentro en imágenes",
-
-    galleryTitle:
-      "ENACOM 2025 en San Luis",
+    galleryKicker: "El encuentro en imágenes",
+    galleryTitle: "ENACOM 2025 en San Luis",
 
     galleryText:
       "Una mirada visual sobre las jornadas realizadas en la Facultad de Ciencias Humanas de la Universidad Nacional de San Luis.",
 
-    photo1Title:
-      "Apertura del ENACOM 2025",
+    photo1Title: "Apertura del ENACOM 2025",
 
     photo1Credit:
       "Fotografía: Noticias UNSL — Universidad Nacional de San Luis.",
 
-    photo2Title:
-      "Participación y encuentro",
+    photo2Title: "Participación y encuentro",
 
     photo2Credit:
       "Fotografía: Noticias UNSL — Universidad Nacional de San Luis.",
 
-    photo3Title:
-      "Comunidad académica",
+    photo3Title: "Comunidad académica",
 
     photo3Credit:
       "Fotografía: Noticias UNSL — Universidad Nacional de San Luis.",
 
-    photo4Title:
-      "Ponencias y debates",
+    photo4Title: "Ponencias y debates",
 
     photo4Credit:
       "Fotografía: Facultad de Ciencias de la Educación — UNER.",
 
-    photo5Title:
-      "Participantes del encuentro",
+    photo5Title: "Participantes del encuentro",
 
     photo5Credit:
       "Fotografía: Facultad de Ciencias de la Educación — UNER.",
@@ -311,11 +212,8 @@ const translations = {
     photoNote:
       "Las fotografías se presentan con identificación de su fuente y autoría.",
 
-    axesKicker:
-      "Recorrido conceptual",
-
-    axesTitle:
-      "Ejes temáticos",
+    axesKicker: "Recorrido conceptual",
+    axesTitle: "Ejes temáticos",
 
     axesIntro:
       "El recorrido reúne algunas de las principales problemáticas abordadas durante el ENACOM 2025.",
@@ -326,11 +224,8 @@ const translations = {
     axisMainText:
       "Este eje aborda la relación entre las crisis socioeconómicas y políticas, la comunicación pública, el periodismo, la circulación de información y los desafíos democráticos.",
 
-    problemsKicker:
-      "Debates contemporáneos",
-
-    problemsTitle:
-      "Problemáticas y debates",
+    problemsKicker: "Debates contemporáneos",
+    problemsTitle: "Problemáticas y debates",
 
     problemsIntro:
       "Dos de los temas trabajados en nuestro recorrido sobre comunicación, periodismo y democracia.",
@@ -347,17 +242,11 @@ const translations = {
     problemBText:
       "La circulación de fake news, la inteligencia artificial y la desinformación transforman la forma en que se produce, distribuye y recibe información.",
 
-    viewInfographic:
-      "Ver infografía completa",
+    viewInfographic: "Ver infografía completa",
+    viewPdf: "Ver material completo",
 
-    viewPdf:
-      "Ver material completo",
-
-    speakersKicker:
-      "Voces del encuentro",
-
-    speakersTitle:
-      "Ponencias destacadas",
+    speakersKicker: "Voces del encuentro",
+    speakersTitle: "Ponencias destacadas",
 
     speakersIntro:
       "Algunas de las mesas y especialistas que participaron del ENACOM 2025.",
@@ -377,8 +266,7 @@ const translations = {
     speaker4Title:
       "Herencias de la comunicación",
 
-    quizKicker:
-      "Participá",
+    quizKicker: "Participá",
 
     quizTitle:
       "¿Cuánto sabés sobre comunicación?",
@@ -386,11 +274,9 @@ const translations = {
     quizIntro:
       "Poné a prueba lo que aprendiste durante el recorrido.",
 
-    nextQuestion:
-      "Siguiente pregunta",
+    nextQuestion: "Siguiente pregunta",
 
-    socialKicker:
-      "Seguí el encuentro",
+    socialKicker: "Seguí el encuentro",
 
     socialTitle:
       "ENACOM también está en redes",
@@ -398,8 +284,7 @@ const translations = {
     socialText:
       "Encontrá más información, fotografías y novedades sobre el Encuentro Nacional de Carreras de Comunicación.",
 
-    accessKicker:
-      "Accesibilidad",
+    accessKicker: "Accesibilidad",
 
     accessTitle:
       "Una página para todas las personas",
@@ -407,40 +292,23 @@ const translations = {
     accessText:
       "Utilizá estas herramientas para adaptar la experiencia de lectura según tus necesidades.",
 
-    increaseText:
-      "Aumentar texto",
-
-    decreaseText:
-      "Disminuir texto",
-
-    contrast:
-      "Alto contraste",
-
-    reset:
-      "Restablecer",
+    increaseText: "Aumentar texto",
+    decreaseText: "Disminuir texto",
+    contrast: "Alto contraste",
+    reset: "Restablecer",
 
     closing:
       "ENACOM 2025 invita a pensar el tiempo de la comunicación como una trama viva: memoria, presente, conflicto, tecnología y derecho a la información en diálogo.",
 
     footer:
       "Trabajo académico realizado por estudiantes de la carrera de Comunicación Social de la UNNE."
-
   },
 
-
   en: {
-
-    navEjes:
-      "Thematic axes",
-
-    navPonencias:
-      "Featured talks",
-
-    navInteractivo:
-      "Take part",
-
-    navRedes:
-      "Social media",
+    navEjes: "Thematic axes",
+    navPonencias: "Featured talks",
+    navInteractivo: "Take part",
+    navRedes: "Social media",
 
     kicker:
       "22nd National Meeting of Communication Careers",
@@ -451,11 +319,8 @@ const translations = {
     heroText:
       "A journey through the main debates, talks and productions of ENACOM 2025, held in San Luis, Argentina.",
 
-    heroGallery:
-      "View photographs",
-
-    heroExplore:
-      "Explore the event",
+    heroGallery: "View photographs",
+    heroExplore: "Explore the event",
 
     heroImageCaption:
       "Productions developed from the debates and issues addressed during the event.",
@@ -467,41 +332,33 @@ const translations = {
     countdownSeconds: "Seconds",
     countdownComplete: "ENACOM 2026 has begun.",
 
-    galleryKicker:
-      "The event in images",
-
-    galleryTitle:
-      "ENACOM 2025 in San Luis",
+    galleryKicker: "The event in images",
+    galleryTitle: "ENACOM 2025 in San Luis",
 
     galleryText:
       "A visual look at the sessions held at the Faculty of Human Sciences of the National University of San Luis.",
 
-    photo1Title:
-      "Opening of ENACOM 2025",
+    photo1Title: "Opening of ENACOM 2025",
 
     photo1Credit:
       "Photograph: Noticias UNSL — National University of San Luis.",
 
-    photo2Title:
-      "Participation and encounter",
+    photo2Title: "Participation and encounter",
 
     photo2Credit:
       "Photograph: Noticias UNSL — National University of San Luis.",
 
-    photo3Title:
-      "Academic community",
+    photo3Title: "Academic community",
 
     photo3Credit:
       "Photograph: Noticias UNSL — National University of San Luis.",
 
-    photo4Title:
-      "Talks and debates",
+    photo4Title: "Talks and debates",
 
     photo4Credit:
       "Photograph: Faculty of Education Sciences — UNER.",
 
-    photo5Title:
-      "Event participants",
+    photo5Title: "Event participants",
 
     photo5Credit:
       "Photograph: Faculty of Education Sciences — UNER.",
@@ -509,11 +366,8 @@ const translations = {
     photoNote:
       "Photographs are presented with their source and authorship clearly identified.",
 
-    axesKicker:
-      "Conceptual journey",
-
-    axesTitle:
-      "Thematic axes",
+    axesKicker: "Conceptual journey",
+    axesTitle: "Thematic axes",
 
     axesIntro:
       "The journey brings together some of the main issues addressed during ENACOM 2025.",
@@ -524,11 +378,8 @@ const translations = {
     axisMainText:
       "This axis explores the relationship between socioeconomic and political crises, public communication, journalism, information circulation and democratic challenges.",
 
-    problemsKicker:
-      "Contemporary debates",
-
-    problemsTitle:
-      "Issues and debates",
+    problemsKicker: "Contemporary debates",
+    problemsTitle: "Issues and debates",
 
     problemsIntro:
       "Two of the topics explored in our journey through communication, journalism and democracy.",
@@ -548,14 +399,10 @@ const translations = {
     viewInfographic:
       "View complete infographic",
 
-    viewPdf:
-      "View complete material",
+    viewPdf: "View complete material",
 
-    speakersKicker:
-      "Voices of the event",
-
-    speakersTitle:
-      "Featured talks",
+    speakersKicker: "Voices of the event",
+    speakersTitle: "Featured talks",
 
     speakersIntro:
       "Some of the panels and specialists who participated in ENACOM 2025.",
@@ -575,8 +422,7 @@ const translations = {
     speaker4Title:
       "Legacies of communication",
 
-    quizKicker:
-      "Take part",
+    quizKicker: "Take part",
 
     quizTitle:
       "How much do you know about communication?",
@@ -584,11 +430,9 @@ const translations = {
     quizIntro:
       "Test what you learned during the journey.",
 
-    nextQuestion:
-      "Next question",
+    nextQuestion: "Next question",
 
-    socialKicker:
-      "Follow the event",
+    socialKicker: "Follow the event",
 
     socialTitle:
       "ENACOM is also on social media",
@@ -596,8 +440,7 @@ const translations = {
     socialText:
       "Find more information, photographs and news about the National Meeting of Communication Careers.",
 
-    accessKicker:
-      "Accessibility",
+    accessKicker: "Accessibility",
 
     accessTitle:
       "A website for everyone",
@@ -605,40 +448,23 @@ const translations = {
     accessText:
       "Use these tools to adapt the reading experience to your needs.",
 
-    increaseText:
-      "Increase text",
-
-    decreaseText:
-      "Decrease text",
-
-    contrast:
-      "High contrast",
-
-    reset:
-      "Reset",
+    increaseText: "Increase text",
+    decreaseText: "Decrease text",
+    contrast: "High contrast",
+    reset: "Reset",
 
     closing:
       "ENACOM 2025 invites us to think about the time of communication as a living network: memory, present, conflict, technology and the right to information in dialogue.",
 
     footer:
       "Academic project developed by students of the Social Communication program at UNNE."
-
   },
 
-
   pt: {
-
-    navEjes:
-      "Eixos temáticos",
-
-    navPonencias:
-      "Palestras",
-
-    navInteractivo:
-      "Participe",
-
-    navRedes:
-      "Redes sociais",
+    navEjes: "Eixos temáticos",
+    navPonencias: "Palestras",
+    navInteractivo: "Participe",
+    navRedes: "Redes sociais",
 
     kicker:
       "22º Encontro Nacional de Carreiras de Comunicação",
@@ -649,33 +475,28 @@ const translations = {
     heroText:
       "Um percurso pelos principais debates, palestras e produções do ENACOM 2025, realizado em San Luis, Argentina.",
 
-    heroGallery:
-      "Ver fotografias",
-
-    heroExplore:
-      "Explorar o encontro",
+    heroGallery: "Ver fotografias",
+    heroExplore: "Explorar o encontro",
 
     heroImageCaption:
       "Produções desenvolvidas a partir dos debates e questões abordados durante o encontro.",
 
-    countdownTitle: "Dias para o ENACOM 2026",
+    countdownTitle:
+      "Dias para o ENACOM 2026",
+
     countdownDays: "Dias",
     countdownHours: "Horas",
     countdownMinutes: "Minutos",
     countdownSeconds: "Segundos",
     countdownComplete: "O ENACOM 2026 já começou.",
 
-    galleryKicker:
-      "O encontro em imagens",
-
-    galleryTitle:
-      "ENACOM 2025 em San Luis",
+    galleryKicker: "O encontro em imagens",
+    galleryTitle: "ENACOM 2025 em San Luis",
 
     galleryText:
       "Um olhar visual sobre as jornadas realizadas na Faculdade de Ciências Humanas da Universidade Nacional de San Luis.",
 
-    photo1Title:
-      "Abertura do ENACOM 2025",
+    photo1Title: "Abertura do ENACOM 2025",
 
     photo1Credit:
       "Fotografia: Noticias UNSL — Universidade Nacional de San Luis.",
@@ -773,8 +594,7 @@ const translations = {
     speaker4Title:
       "Heranças da comunicação",
 
-    quizKicker:
-      "Participe",
+    quizKicker: "Participe",
 
     quizTitle:
       "Quanto você sabe sobre comunicação?",
@@ -820,12 +640,8 @@ const translations = {
 
     footer:
       "Trabalho acadêmico realizado por estudantes da carreira de Comunicação Social da UNNE."
-
   }
-
 };
-
-
 
 /* =========================================================
    CAMBIAR IDIOMA
@@ -834,91 +650,59 @@ const translations = {
 const languageButtons =
   document.querySelectorAll(".language-btn");
 
-
 function changeLanguage(lang) {
-
   if (!translations[lang]) {
     lang = "es";
   }
 
   document.documentElement.lang = lang;
 
-
   const elements =
     document.querySelectorAll("[data-i18n]");
 
-
   elements.forEach((element) => {
-
-    const key =
-      element.dataset.i18n;
+    const key = element.dataset.i18n;
 
     if (
       translations[lang] &&
       translations[lang][key] !== undefined
     ) {
-
       element.textContent =
         translations[lang][key];
-
     }
-
   });
 
-
   languageButtons.forEach((button) => {
-
     button.classList.toggle(
       "active",
       button.dataset.lang === lang
     );
-
   });
-
 
   localStorage.setItem(
     "enacom-language",
     lang
   );
 
-
-  /* Actualizar el quiz si está activo */
-
   if (
     typeof renderQuestion === "function" &&
     typeof currentQuestion !== "undefined" &&
     currentQuestion < quizQuestions.length
   ) {
-
     renderQuestion();
-
   }
 
+  updateCountdown();
 }
 
-
 languageButtons.forEach((button) => {
-
-  button.addEventListener(
-    "click",
-    () => {
-
-      changeLanguage(
-        button.dataset.lang
-      );
-
-    }
-  );
-
+  button.addEventListener("click", () => {
+    changeLanguage(button.dataset.lang);
+  });
 });
 
-
 const savedLanguage =
-  localStorage.getItem(
-    "enacom-language"
-  ) || "es";
-
-
+  localStorage.getItem("enacom-language") || "es";
 
 /* =========================================================
    ACCESIBILIDAD
@@ -926,182 +710,107 @@ const savedLanguage =
 
 let textScale =
   parseFloat(
-    localStorage.getItem(
-      "enacom-text-scale"
-    )
+    localStorage.getItem("enacom-text-scale")
   ) || 1;
-
 
 document.documentElement.style.setProperty(
   "--text-scale",
   textScale
 );
 
-
-
-/* AUMENTAR TEXTO */
-
 const increaseTextButton =
   document.getElementById("increase-text");
 
-
 if (increaseTextButton) {
+  increaseTextButton.addEventListener("click", () => {
+    textScale = Math.min(
+      textScale + 0.1,
+      1.5
+    );
 
-  increaseTextButton.addEventListener(
-    "click",
-    () => {
-
-      textScale =
-        Math.min(
-          textScale + 0.1,
-          1.5
-        );
-
-      updateTextScale();
-
-    }
-  );
-
+    updateTextScale();
+  });
 }
-
-
-
-/* DISMINUIR TEXTO */
 
 const decreaseTextButton =
   document.getElementById("decrease-text");
 
-
 if (decreaseTextButton) {
+  decreaseTextButton.addEventListener("click", () => {
+    textScale = Math.max(
+      textScale - 0.1,
+      0.8
+    );
 
-  decreaseTextButton.addEventListener(
-    "click",
-    () => {
-
-      textScale =
-        Math.max(
-          textScale - 0.1,
-          0.8
-        );
-
-      updateTextScale();
-
-    }
-  );
-
+    updateTextScale();
+  });
 }
 
-
-
 function updateTextScale() {
-
   document.documentElement.style.setProperty(
     "--text-scale",
     textScale
   );
 
-
   localStorage.setItem(
     "enacom-text-scale",
     textScale
   );
-
 }
-
-
-
-/* ALTO CONTRASTE */
 
 const contrastButton =
   document.getElementById("contrast-toggle");
 
-
 if (contrastButton) {
+  contrastButton.addEventListener("click", () => {
+    document.body.classList.toggle(
+      "high-contrast"
+    );
 
-  contrastButton.addEventListener(
-    "click",
-    () => {
-
-      document.body.classList.toggle(
+    localStorage.setItem(
+      "enacom-contrast",
+      document.body.classList.contains(
         "high-contrast"
-      );
-
-
-      localStorage.setItem(
-        "enacom-contrast",
-        document.body.classList.contains(
-          "high-contrast"
-        )
-      );
-
-    }
-  );
-
+      )
+    );
+  });
 }
-
-
-
-/* Recuperar contraste guardado */
 
 if (
-  localStorage.getItem(
-    "enacom-contrast"
-  ) === "true"
+  localStorage.getItem("enacom-contrast") === "true"
 ) {
-
-  document.body.classList.add(
-    "high-contrast"
-  );
-
+  document.body.classList.add("high-contrast");
 }
 
-
-
-/* RESTABLECER */
-
 const resetAccessibilityButton =
-  document.getElementById(
-    "reset-accessibility"
-  );
-
+  document.getElementById("reset-accessibility");
 
 if (resetAccessibilityButton) {
-
   resetAccessibilityButton.addEventListener(
     "click",
     () => {
-
       textScale = 1;
 
       updateTextScale();
-
 
       document.body.classList.remove(
         "high-contrast"
       );
 
-
       localStorage.removeItem(
         "enacom-contrast"
       );
-
     }
   );
-
 }
-
-
 
 /* =========================================================
    QUIZ
 ========================================================= */
 
 const quizQuestions = [
-
   {
-
     question: {
-
       es:
         "¿Cuál es uno de los principales desafíos de la desinformación?",
 
@@ -1110,56 +819,33 @@ const quizQuestions = [
 
       pt:
         "Qual é um dos principais desafios da desinformação?"
-
     },
-
 
     options: {
-
       es: [
-
         "Mejorar automáticamente la calidad de las noticias",
-
         "Afectar la confianza pública y la circulación de información",
-
         "Eliminar la necesidad de periodistas"
-
       ],
-
 
       en: [
-
         "Automatically improve news quality",
-
         "Affect public trust and the circulation of information",
-
         "Eliminate the need for journalists"
-
       ],
 
-
       pt: [
-
         "Melhorar automaticamente a qualidade das notícias",
-
         "Afetar a confiança pública e a circulação de informações",
-
         "Eliminar a necessidade de jornalistas"
-
       ]
-
     },
 
-
     correct: 1
-
   },
 
-
   {
-
     question: {
-
       es:
         "¿Qué relación existe entre comunicación y democracia?",
 
@@ -1168,56 +854,33 @@ const quizQuestions = [
 
       pt:
         "Qual é a relação entre comunicação e democracia?"
-
     },
-
 
     options: {
-
       es: [
-
         "La comunicación no tiene relación con la democracia",
-
         "La circulación de información contribuye a la participación y al debate público",
-
         "La democracia depende únicamente de las redes sociales"
-
       ],
-
 
       en: [
-
         "Communication has no relationship with democracy",
-
         "The circulation of information contributes to participation and public debate",
-
         "Democracy depends only on social media"
-
       ],
 
-
       pt: [
-
         "A comunicação não tem relação com a democracia",
-
         "A circulação de informações contribui para a participação e o debate público",
-
         "A democracia depende apenas das redes sociais"
-
       ]
-
     },
 
-
     correct: 1
-
   },
 
-
   {
-
     question: {
-
       es:
         "¿Qué tecnología plantea nuevos desafíos para el periodismo?",
 
@@ -1226,56 +889,33 @@ const quizQuestions = [
 
       pt:
         "Qual tecnologia cria novos desafios para o jornalismo?"
-
     },
-
 
     options: {
-
       es: [
-
         "La inteligencia artificial",
-
         "El papel",
-
         "La radio analógica únicamente"
-
       ],
-
 
       en: [
-
         "Artificial intelligence",
-
         "Paper",
-
         "Analog radio only"
-
       ],
 
-
       pt: [
-
         "A inteligência artificial",
-
         "O papel",
-
         "Apenas o rádio analógico"
-
       ]
-
     },
 
-
     correct: 0
-
   },
 
-
   {
-
     question: {
-
       es:
         "¿Dónde se realizó ENACOM 2025?",
 
@@ -1284,123 +924,73 @@ const quizQuestions = [
 
       pt:
         "Onde foi realizado o ENACOM 2025?"
-
     },
-
 
     options: {
-
       es: [
-
         "San Luis",
-
         "Buenos Aires",
-
         "Córdoba"
-
       ],
-
 
       en: [
-
         "San Luis",
-
         "Buenos Aires",
-
         "Córdoba"
-
       ],
 
-
       pt: [
-
         "San Luis",
-
         "Buenos Aires",
-
         "Córdoba"
-
       ]
-
     },
 
-
     correct: 0
-
   }
-
 ];
 
-
-
 let currentQuestion = 0;
-
 let score = 0;
-
 let selectedAnswer = null;
 
-
-
 const quizContainer =
-  document.getElementById(
-    "quiz-container"
-  );
-
+  document.getElementById("quiz-container");
 
 const quizNext =
-  document.getElementById(
-    "quiz-next"
-  );
-
+  document.getElementById("quiz-next");
 
 const quizResult =
-  document.getElementById(
-    "quiz-result"
-  );
-
-
+  document.getElementById("quiz-result");
 
 /* =========================================================
    RENDERIZAR PREGUNTA
 ========================================================= */
 
 function renderQuestion() {
-
   if (!quizContainer) return;
-
   if (!quizNext) return;
-
   if (!quizResult) return;
 
-
   selectedAnswer = null;
-
 
   const lang =
     document.documentElement.lang || "es";
 
-
   const question =
     quizQuestions[currentQuestion];
 
-
   if (!question) return;
 
-
   quizContainer.innerHTML = "";
-
 
   const wrapper =
     document.createElement("div");
 
-
-  wrapper.className =
-    "quiz-question";
-
+  wrapper.className = "quiz-question";
 
   const title =
     document.createElement("h3");
-
 
   title.textContent =
     `${currentQuestion + 1}. ${
@@ -1408,236 +998,161 @@ function renderQuestion() {
       question.question.es
     }`;
 
-
   wrapper.appendChild(title);
-
 
   const options =
     document.createElement("div");
 
-
-  options.className =
-    "quiz-options";
-
+  options.className = "quiz-options";
 
   const questionOptions =
     question.options[lang] ||
     question.options.es;
 
+  questionOptions.forEach((option, index) => {
+    const button =
+      document.createElement("button");
 
-  questionOptions.forEach(
-    (option, index) => {
+    button.type = "button";
+    button.className = "quiz-option";
+    button.textContent = option;
 
-      const button =
-        document.createElement("button");
+    button.addEventListener("click", () => {
+      selectedAnswer = index;
 
+      quizContainer
+        .querySelectorAll(".quiz-option")
+        .forEach((item) => {
+          item.classList.remove("selected");
+        });
 
-      button.type = "button";
+      button.classList.add("selected");
+    });
 
-
-      button.className =
-        "quiz-option";
-
-
-      button.textContent =
-        option;
-
-
-      button.addEventListener(
-        "click",
-        () => {
-
-          selectedAnswer = index;
-
-
-          document
-            .querySelectorAll(".quiz-option")
-            .forEach((item) => {
-
-              item.classList.remove(
-                "selected"
-              );
-
-            });
-
-
-          button.classList.add(
-            "selected"
-          );
-
-        }
-      );
-
-
-      options.appendChild(button);
-
-    }
-  );
-
+    options.appendChild(button);
+  });
 
   wrapper.appendChild(options);
 
-
   quizContainer.appendChild(wrapper);
-
 
   quizResult.textContent = "";
 
-
   quizNext.style.display = "";
-
-
   quizNext.disabled = false;
-
 }
-
-
 
 /* =========================================================
    SIGUIENTE PREGUNTA
 ========================================================= */
 
 if (quizNext) {
+  quizNext.addEventListener("click", () => {
+    if (selectedAnswer === null) {
+      const lang =
+        document.documentElement.lang || "es";
 
-  quizNext.addEventListener(
-    "click",
-    () => {
-
-      if (selectedAnswer === null) {
-
-        const lang =
-          document.documentElement.lang ||
-          "es";
-
-
-        if (quizResult) {
-
-          if (lang === "pt") {
-
-            quizResult.textContent =
-              "Escolha uma resposta antes de continuar.";
-
-          } else if (lang === "en") {
-
-            quizResult.textContent =
-              "Choose an answer before continuing.";
-
-          } else {
-
-            quizResult.textContent =
-              "Elegí una respuesta antes de continuar.";
-
-          }
-
+      if (quizResult) {
+        if (lang === "pt") {
+          quizResult.textContent =
+            "Escolha uma resposta antes de continuar.";
+        } else if (lang === "en") {
+          quizResult.textContent =
+            "Choose an answer before continuing.";
+        } else {
+          quizResult.textContent =
+            "Elegí una respuesta antes de continuar.";
         }
-
-        return;
-
       }
 
-
-
-      if (
-        selectedAnswer ===
-        quizQuestions[currentQuestion].correct
-      ) {
-
-        score++;
-
-      }
-
-
-      currentQuestion++;
-
-
-      if (
-        currentQuestion >=
-        quizQuestions.length
-      ) {
-
-        showQuizResult();
-
-      } else {
-
-        renderQuestion();
-
-      }
-
+      return;
     }
-  );
 
+    if (
+      selectedAnswer ===
+      quizQuestions[currentQuestion].correct
+    ) {
+      score++;
+    }
+
+    currentQuestion++;
+
+    if (
+      currentQuestion >= quizQuestions.length
+    ) {
+      showQuizResult();
+    } else {
+      renderQuestion();
+    }
+  });
 }
-
-
 
 /* =========================================================
    RESULTADO DEL QUIZ
 ========================================================= */
 
 function showQuizResult() {
-
   if (!quizContainer) return;
-
   if (!quizNext) return;
-
   if (!quizResult) return;
-
 
   const lang =
     document.documentElement.lang || "es";
 
-
   quizContainer.innerHTML = "";
 
-
-  quizNext.style.display =
-    "none";
-
+  quizNext.style.display = "none";
 
   let message = "";
 
-
   if (lang === "en") {
-
     message =
       `You got ${score} out of ${quizQuestions.length} correct.`;
-
   } else if (lang === "pt") {
-
     message =
       `Você acertou ${score} de ${quizQuestions.length} perguntas.`;
-
   } else {
-
     message =
       `Acertaste ${score} de ${quizQuestions.length} preguntas.`;
-
   }
 
-
-  quizResult.textContent =
-    message;
-
+  quizResult.textContent = message;
 }
-
 
 /* =========================================================
    CUENTA REGRESIVA · ENACOM 2026
 ========================================================= */
 
-const countdownTarget = new Date("2026-11-04T08:00:00-03:00").getTime();
-const countdownDays = document.getElementById("countdown-days");
-const countdownHours = document.getElementById("countdown-hours");
-const countdownMinutes = document.getElementById("countdown-minutes");
-const countdownSeconds = document.getElementById("countdown-seconds");
-const countdownStatus = document.getElementById("countdown-status");
+const countdownTarget =
+  new Date("2026-11-04T08:00:00-03:00").getTime();
+
+const countdownDays =
+  document.getElementById("countdown-days");
+
+const countdownHours =
+  document.getElementById("countdown-hours");
+
+const countdownMinutes =
+  document.getElementById("countdown-minutes");
+
+const countdownSeconds =
+  document.getElementById("countdown-seconds");
+
+const countdownStatus =
+  document.getElementById("countdown-status");
 
 function updateCountdown() {
-  if (!countdownDays || !countdownHours || !countdownMinutes || !countdownSeconds) {
-    return;
+  if (
+    !countdownDays ||
+    !countdownHours ||
+    !countdownMinutes ||
+    !countdownSeconds
+  ) {
+    return false;
   }
 
-  const remaining = countdownTarget - Date.now();
+  const remaining =
+    countdownTarget - Date.now();
 
   if (remaining <= 0) {
     countdownDays.textContent = "0";
@@ -1646,28 +1161,52 @@ function updateCountdown() {
     countdownSeconds.textContent = "0";
 
     if (countdownStatus) {
-      const lang = document.documentElement.lang || "es";
-      countdownStatus.textContent = translations[lang].countdownComplete;
+      const lang =
+        document.documentElement.lang || "es";
+
+      countdownStatus.textContent =
+        translations[lang].countdownComplete;
     }
 
     return true;
   }
 
-  const totalSeconds = Math.floor(remaining / 1000);
-  const days = Math.floor(totalSeconds / 86400);
-  const hours = Math.floor((totalSeconds % 86400) / 3600);
-  const minutes = Math.floor((totalSeconds % 3600) / 60);
-  const seconds = totalSeconds % 60;
+  const totalSeconds =
+    Math.floor(remaining / 1000);
+
+  const days =
+    Math.floor(totalSeconds / 86400);
+
+  const hours =
+    Math.floor(
+      (totalSeconds % 86400) / 3600
+    );
+
+  const minutes =
+    Math.floor(
+      (totalSeconds % 3600) / 60
+    );
+
+  const seconds =
+    totalSeconds % 60;
 
   countdownDays.textContent = String(days);
-  countdownHours.textContent = String(hours).padStart(2, "0");
-  countdownMinutes.textContent = String(minutes).padStart(2, "0");
-  countdownSeconds.textContent = String(seconds).padStart(2, "0");
+
+  countdownHours.textContent =
+    String(hours).padStart(2, "0");
+
+  countdownMinutes.textContent =
+    String(minutes).padStart(2, "0");
+
+  countdownSeconds.textContent =
+    String(seconds).padStart(2, "0");
+
+  if (countdownStatus) {
+    countdownStatus.textContent = "";
+  }
 
   return false;
 }
-
-
 
 /* =========================================================
    INICIAR
