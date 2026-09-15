@@ -22,7 +22,6 @@ accordionButtons.forEach((button) => {
     const isOpen = article.classList.contains("open");
 
     article.classList.toggle("open");
-
     button.setAttribute("aria-expanded", String(!isOpen));
 
     if (!isOpen) {
@@ -63,11 +62,7 @@ if (
 
     dot.className = "carousel-dot";
     dot.type = "button";
-
-    dot.setAttribute(
-      "aria-label",
-      `Ver fotografía ${index + 1}`
-    );
+    dot.setAttribute("aria-label", `Ver fotografía ${index + 1}`);
 
     dot.addEventListener("click", () => {
       showSlide(index);
@@ -92,17 +87,11 @@ if (
     currentSlide = index;
 
     slides.forEach((slide, i) => {
-      slide.classList.toggle(
-        "active",
-        i === currentSlide
-      );
+      slide.classList.toggle("active", i === currentSlide);
     });
 
     dots.forEach((dot, i) => {
-      dot.classList.toggle(
-        "active",
-        i === currentSlide
-      );
+      dot.classList.toggle("active", i === currentSlide);
     });
   }
 
@@ -279,7 +268,7 @@ const translations = {
     socialKicker: "Seguí el encuentro",
 
     socialTitle:
-      "ENACOM también está en redes",
+      "ENACOM también está en redes sociales",
 
     socialText:
       "Encontrá más información, fotografías y novedades sobre el Encuentro Nacional de Carreras de Comunicación.",
@@ -609,7 +598,7 @@ const translations = {
       "Acompanhe o encontro",
 
     socialTitle:
-      "O ENACOM também está nas redes",
+      "O ENACOM também está nas redes sociais",
 
     socialText:
       "Encontre mais informações, fotografias e novidades sobre o Encontro Nacional de Carreiras de Comunicação.",
@@ -647,8 +636,28 @@ const translations = {
    CAMBIAR IDIOMA
 ========================================================= */
 
-const languageButtons =
-  document.querySelectorAll(".language-btn");
+Object.assign(translations.es, {
+  navSections: "Secciones",
+  navHome: "Inicio",
+  navGallery: "Galería",
+  navProblems: "Problemáticas"
+});
+
+Object.assign(translations.en, {
+  navSections: "Sections",
+  navHome: "Home",
+  navGallery: "Gallery",
+  navProblems: "Issues"
+});
+
+Object.assign(translations.pt, {
+  navSections: "Seções",
+  navHome: "Início",
+  navGallery: "Galeria",
+  navProblems: "Problemáticas"
+});
+
+const languageButtons = document.querySelectorAll(".language-btn");
 
 function changeLanguage(lang) {
   if (!translations[lang]) {
@@ -657,8 +666,7 @@ function changeLanguage(lang) {
 
   document.documentElement.lang = lang;
 
-  const elements =
-    document.querySelectorAll("[data-i18n]");
+  const elements = document.querySelectorAll("[data-i18n]");
 
   elements.forEach((element) => {
     const key = element.dataset.i18n;
@@ -667,8 +675,7 @@ function changeLanguage(lang) {
       translations[lang] &&
       translations[lang][key] !== undefined
     ) {
-      element.textContent =
-        translations[lang][key];
+      element.textContent = translations[lang][key];
     }
   });
 
@@ -679,10 +686,7 @@ function changeLanguage(lang) {
     );
   });
 
-  localStorage.setItem(
-    "enacom-language",
-    lang
-  );
+  localStorage.setItem("enacom-language", lang);
 
   if (
     typeof renderQuestion === "function" &&
@@ -690,6 +694,8 @@ function changeLanguage(lang) {
     currentQuestion < quizQuestions.length
   ) {
     renderQuestion();
+  } else if (currentQuestion === quizQuestions.length) {
+    showQuizResult();
   }
 
   updateCountdown();
@@ -709,39 +715,27 @@ const savedLanguage =
 ========================================================= */
 
 let textScale =
-  parseFloat(
-    localStorage.getItem("enacom-text-scale")
-  ) || 1;
+  parseFloat(localStorage.getItem("enacom-text-scale")) || 1;
 
 document.documentElement.style.setProperty(
   "--text-scale",
   textScale
 );
 
-const increaseTextButton =
-  document.getElementById("increase-text");
+const increaseTextButton = document.getElementById("increase-text");
 
 if (increaseTextButton) {
   increaseTextButton.addEventListener("click", () => {
-    textScale = Math.min(
-      textScale + 0.1,
-      1.5
-    );
-
+    textScale = Math.min(textScale + 0.1, 1.5);
     updateTextScale();
   });
 }
 
-const decreaseTextButton =
-  document.getElementById("decrease-text");
+const decreaseTextButton = document.getElementById("decrease-text");
 
 if (decreaseTextButton) {
   decreaseTextButton.addEventListener("click", () => {
-    textScale = Math.max(
-      textScale - 0.1,
-      0.8
-    );
-
+    textScale = Math.max(textScale - 0.1, 0.8);
     updateTextScale();
   });
 }
@@ -752,33 +746,23 @@ function updateTextScale() {
     textScale
   );
 
-  localStorage.setItem(
-    "enacom-text-scale",
-    textScale
-  );
+  localStorage.setItem("enacom-text-scale", textScale);
 }
 
-const contrastButton =
-  document.getElementById("contrast-toggle");
+const contrastButton = document.getElementById("contrast-toggle");
 
 if (contrastButton) {
   contrastButton.addEventListener("click", () => {
-    document.body.classList.toggle(
-      "high-contrast"
-    );
+    document.body.classList.toggle("high-contrast");
 
     localStorage.setItem(
       "enacom-contrast",
-      document.body.classList.contains(
-        "high-contrast"
-      )
+      document.body.classList.contains("high-contrast")
     );
   });
 }
 
-if (
-  localStorage.getItem("enacom-contrast") === "true"
-) {
+if (localStorage.getItem("enacom-contrast") === "true") {
   document.body.classList.add("high-contrast");
 }
 
@@ -786,39 +770,30 @@ const resetAccessibilityButton =
   document.getElementById("reset-accessibility");
 
 if (resetAccessibilityButton) {
-  resetAccessibilityButton.addEventListener(
-    "click",
-    () => {
-      textScale = 1;
+  resetAccessibilityButton.addEventListener("click", () => {
+    textScale = 1;
 
-      updateTextScale();
+    updateTextScale();
 
-      document.body.classList.remove(
-        "high-contrast"
-      );
+    document.body.classList.remove("high-contrast");
 
-      localStorage.removeItem(
-        "enacom-contrast"
-      );
-    }
-  );
+    localStorage.removeItem("enacom-contrast");
+  });
 }
 
 /* =========================================================
-   QUIZ
+   PREGUNTAS DEL CUESTIONARIO
 ========================================================= */
 
 const quizQuestions = [
   {
     question: {
       es:
-        "¿Cuál es uno de los principales desafíos de la desinformación?",
-
+        "¿Cuál es uno de los principales problemas que genera la desinformación?",
       en:
-        "What is one of the main challenges posed by disinformation?",
-
+        "What is one of the main problems caused by disinformation?",
       pt:
-        "Qual é um dos principais desafios da desinformação?"
+        "Qual é um dos principais problemas causados pela desinformação?"
     },
 
     options: {
@@ -848,10 +823,8 @@ const quizQuestions = [
     question: {
       es:
         "¿Qué relación existe entre comunicación y democracia?",
-
       en:
         "What is the relationship between communication and democracy?",
-
       pt:
         "Qual é a relação entre comunicação e democracia?"
     },
@@ -883,10 +856,8 @@ const quizQuestions = [
     question: {
       es:
         "¿Qué tecnología plantea nuevos desafíos para el periodismo?",
-
       en:
         "Which technology creates new challenges for journalism?",
-
       pt:
         "Qual tecnologia cria novos desafios para o jornalismo?"
     },
@@ -916,207 +887,332 @@ const quizQuestions = [
 
   {
     question: {
-      es:
-        "¿Dónde se realizó ENACOM 2025?",
-
-      en:
-        "Where was ENACOM 2025 held?",
-
-      pt:
-        "Onde foi realizado o ENACOM 2025?"
+      es: "¿Dónde se realizó ENACOM 2025?",
+      en: "Where was ENACOM 2025 held?",
+      pt: "Onde foi realizado o ENACOM 2025?"
     },
 
     options: {
-      es: [
-        "San Luis",
-        "Buenos Aires",
-        "Córdoba"
-      ],
-
-      en: [
-        "San Luis",
-        "Buenos Aires",
-        "Córdoba"
-      ],
-
-      pt: [
-        "San Luis",
-        "Buenos Aires",
-        "Córdoba"
-      ]
+      es: ["San Luis", "Buenos Aires", "Córdoba"],
+      en: ["San Luis", "Buenos Aires", "Córdoba"],
+      pt: ["San Luis", "Buenos Aires", "Córdoba"]
     },
 
     correct: 0
   }
 ];
 
-let currentQuestion = 0;
-let score = 0;
-let selectedAnswer = null;
-
-const quizContainer =
-  document.getElementById("quiz-container");
-
-const quizNext =
-  document.getElementById("quiz-next");
-
-const quizResult =
-  document.getElementById("quiz-result");
-
 /* =========================================================
-   RENDERIZAR PREGUNTA
+   EXPLICACIONES
 ========================================================= */
 
-function renderQuestion() {
+const quizExplanations = {
+  es: [
+    "La desinformación dificulta distinguir los hechos de los contenidos falsos o engañosos y puede debilitar la confianza pública en los medios y las instituciones.",
+    "El acceso a información confiable permite participar de manera informada y debatir asuntos de interés público, aspectos fundamentales de la democracia.",
+    "La inteligencia artificial permite generar y modificar contenidos, por lo que exige verificar su autenticidad y reflexionar sobre su uso ético en el periodismo.",
+    "ENACOM 2025 se realizó en San Luis, Argentina, sede del XXII Encuentro Nacional de Carreras de Comunicación."
+  ],
+
+  en: [
+    "Disinformation makes it harder to distinguish facts from false or misleading content and can weaken public trust in media and institutions.",
+    "Access to reliable information supports informed participation and public debate, both essential to democracy.",
+    "Artificial intelligence can generate and alter content, making verification and ethical use important for journalism.",
+    "ENACOM 2025 was held in San Luis, Argentina, hosting the 22nd National Meeting of Communication Degree Programs."
+  ],
+
+  pt: [
+    "A desinformação dificulta distinguir fatos de conteúdos falsos ou enganosos e pode enfraquecer a confiança pública nos meios de comunicação e nas instituições.",
+    "O acesso a informações confiáveis permite a participação informada e o debate público, fundamentais para a democracia.",
+    "A inteligência artificial permite gerar e alterar conteúdos, exigindo verificação de autenticidade e reflexão sobre seu uso ético no jornalismo.",
+    "O ENACOM 2025 foi realizado em San Luis, Argentina, sede do XXII Encontro Nacional de Cursos de Comunicação."
+  ]
+};
+
+const quizLabels = {
+  es: {
+    previous: "Pregunta anterior",
+    next: "Siguiente pregunta",
+    finish: "Ver resultado",
+    restart: "Volver a intentar",
+    correct: "¡Correcto!",
+    incorrect: "Incorrecto.",
+    answer: "Respuesta correcta: ",
+    progress: "Pregunta",
+    of: "de",
+    hint:
+      "Elegí una respuesta. Podés volver atrás para revisar tus respuestas.",
+    result: (n, total) =>
+      `Acertaste ${n} de ${total} preguntas.`
+  },
+
+  en: {
+    previous: "Previous question",
+    next: "Next question",
+    finish: "See result",
+    restart: "Try again",
+    correct: "Correct!",
+    incorrect: "Incorrect.",
+    answer: "Correct answer: ",
+    progress: "Question",
+    of: "of",
+    hint:
+      "Choose an answer. You can go back to review your answers.",
+    result: (n, total) =>
+      `You got ${n} out of ${total} correct.`
+  },
+
+  pt: {
+    previous: "Pergunta anterior",
+    next: "Próxima pergunta",
+    finish: "Ver resultado",
+    restart: "Tentar novamente",
+    correct: "Correto!",
+    incorrect: "Incorreto.",
+    answer: "Resposta correta: ",
+    progress: "Pergunta",
+    of: "de",
+    hint:
+      "Escolha uma resposta. Você pode voltar para revisar suas respostas.",
+    result: (n, total) =>
+      `Você acertou ${n} de ${total} perguntas.`
+  }
+};
+
+/* =========================================================
+   ESTADO DEL CUESTIONARIO
+========================================================= */
+
+let currentQuestion = 0;
+
+const answers = Array(quizQuestions.length).fill(null);
+
+const quizContainer = document.getElementById("quiz-container");
+const quizNext = document.getElementById("quiz-next");
+const quizPrevious = document.getElementById("quiz-previous");
+const quizRestart = document.getElementById("quiz-restart");
+const quizFeedback = document.getElementById("quiz-feedback");
+const quizResult = document.getElementById("quiz-result");
+
+function quizLanguage() {
+  return quizLabels[document.documentElement.lang]
+    ? document.documentElement.lang
+    : "es";
+}
+
+/* =========================================================
+   CORRECCIÓN INMEDIATA
+========================================================= */
+
+function updateAnswerFeedback() {
+  const lang = quizLanguage();
+  const labels = quizLabels[lang];
+  const question = quizQuestions[currentQuestion];
+  const answer = answers[currentQuestion];
+
+  quizNext.disabled = answer === null;
+
+  quizFeedback.replaceChildren();
+  quizFeedback.className = "quiz-feedback";
+
+  if (answer === null) {
+    quizFeedback.textContent = labels.hint;
+    return;
+  }
+
+  const correct = answer === question.correct;
+
+  quizFeedback.classList.add(
+    correct ? "correct" : "incorrect"
+  );
+
+  const heading = document.createElement("strong");
+
+  heading.textContent = correct
+    ? labels.correct
+    : labels.incorrect;
+
+  const explanation = document.createElement("p");
+
+  explanation.textContent =
+    labels.answer +
+    question.options[lang][question.correct] +
+    ". " +
+    quizExplanations[lang][currentQuestion];
+
+  quizFeedback.append(heading, explanation);
+
+  quizContainer
+    .querySelectorAll(".quiz-option")
+    .forEach((button, index) => {
+      button.setAttribute("aria-disabled", "true");
+
+      button.setAttribute(
+        "aria-pressed",
+        String(index === answer)
+      );
+
+      button.classList.toggle(
+        "correct",
+        index === question.correct
+      );
+
+      button.classList.toggle(
+        "incorrect",
+        index === answer && !correct
+      );
+
+      button.classList.toggle(
+        "selected",
+        index === answer
+      );
+    });
+}
+
+/* =========================================================
+   MOSTRAR PREGUNTA
+========================================================= */
+
+function renderQuestion(focus = false) {
   if (!quizContainer) return;
-  if (!quizNext) return;
-  if (!quizResult) return;
 
-  selectedAnswer = null;
-
-  const lang =
-    document.documentElement.lang || "es";
-
-  const question =
-    quizQuestions[currentQuestion];
+  const lang = quizLanguage();
+  const labels = quizLabels[lang];
+  const question = quizQuestions[currentQuestion];
 
   if (!question) return;
 
-  quizContainer.innerHTML = "";
+  quizContainer.replaceChildren();
 
-  const wrapper =
-    document.createElement("div");
+  const progress = document.createElement("p");
 
+  progress.className = "quiz-progress";
+  progress.textContent =
+    `${labels.progress} ${currentQuestion + 1} ` +
+    `${labels.of} ${quizQuestions.length}`;
+
+  const title = document.createElement("h3");
+
+  title.id = "quiz-question-title";
+  title.tabIndex = -1;
+  title.textContent = question.question[lang];
+
+  const wrapper = document.createElement("div");
   wrapper.className = "quiz-question";
 
-  const title =
-    document.createElement("h3");
-
-  title.textContent =
-    `${currentQuestion + 1}. ${
-      question.question[lang] ||
-      question.question.es
-    }`;
-
-  wrapper.appendChild(title);
-
-  const options =
-    document.createElement("div");
+  const options = document.createElement("div");
 
   options.className = "quiz-options";
+  options.setAttribute("role", "group");
+  options.setAttribute("aria-labelledby", title.id);
 
-  const questionOptions =
-    question.options[lang] ||
-    question.options.es;
-
-  questionOptions.forEach((option, index) => {
-    const button =
-      document.createElement("button");
+  question.options[lang].forEach((option, index) => {
+    const button = document.createElement("button");
 
     button.type = "button";
     button.className = "quiz-option";
     button.textContent = option;
+    button.setAttribute("aria-pressed", "false");
 
     button.addEventListener("click", () => {
-      selectedAnswer = index;
+      // Conserva la primera respuesta para mantener el puntaje.
+      if (answers[currentQuestion] !== null) return;
 
-      quizContainer
-        .querySelectorAll(".quiz-option")
-        .forEach((item) => {
-          item.classList.remove("selected");
-        });
+      answers[currentQuestion] = index;
 
-      button.classList.add("selected");
+      updateAnswerFeedback();
     });
 
     options.appendChild(button);
   });
 
-  wrapper.appendChild(options);
-
+  wrapper.append(progress, title, options);
   quizContainer.appendChild(wrapper);
 
   quizResult.textContent = "";
 
-  quizNext.style.display = "";
-  quizNext.disabled = false;
-}
+  quizNext.hidden = false;
 
-/* =========================================================
-   SIGUIENTE PREGUNTA
-========================================================= */
+  quizNext.textContent =
+    currentQuestion === quizQuestions.length - 1
+      ? labels.finish
+      : labels.next;
 
-if (quizNext) {
-  quizNext.addEventListener("click", () => {
-    if (selectedAnswer === null) {
-      const lang =
-        document.documentElement.lang || "es";
+  quizPrevious.textContent = labels.previous;
+  quizPrevious.disabled = currentQuestion === 0;
 
-      if (quizResult) {
-        if (lang === "pt") {
-          quizResult.textContent =
-            "Escolha uma resposta antes de continuar.";
-        } else if (lang === "en") {
-          quizResult.textContent =
-            "Choose an answer before continuing.";
-        } else {
-          quizResult.textContent =
-            "Elegí una respuesta antes de continuar.";
-        }
-      }
+  quizRestart.hidden = true;
 
-      return;
-    }
+  updateAnswerFeedback();
 
-    if (
-      selectedAnswer ===
-      quizQuestions[currentQuestion].correct
-    ) {
-      score++;
-    }
-
-    currentQuestion++;
-
-    if (
-      currentQuestion >= quizQuestions.length
-    ) {
-      showQuizResult();
-    } else {
-      renderQuestion();
-    }
-  });
-}
-
-/* =========================================================
-   RESULTADO DEL QUIZ
-========================================================= */
-
-function showQuizResult() {
-  if (!quizContainer) return;
-  if (!quizNext) return;
-  if (!quizResult) return;
-
-  const lang =
-    document.documentElement.lang || "es";
-
-  quizContainer.innerHTML = "";
-
-  quizNext.style.display = "none";
-
-  let message = "";
-
-  if (lang === "en") {
-    message =
-      `You got ${score} out of ${quizQuestions.length} correct.`;
-  } else if (lang === "pt") {
-    message =
-      `Você acertou ${score} de ${quizQuestions.length} perguntas.`;
-  } else {
-    message =
-      `Acertaste ${score} de ${quizQuestions.length} preguntas.`;
+  if (focus) {
+    title.focus({ preventScroll: true });
   }
+}
 
-  quizResult.textContent = message;
+/* =========================================================
+   BOTONES DEL CUESTIONARIO
+========================================================= */
+
+quizNext?.addEventListener("click", () => {
+  if (answers[currentQuestion] === null) return;
+
+  currentQuestion++;
+
+  if (currentQuestion === quizQuestions.length) {
+    showQuizResult(true);
+  } else {
+    renderQuestion(true);
+  }
+});
+
+quizPrevious?.addEventListener("click", () => {
+  if (currentQuestion > 0) {
+    currentQuestion--;
+    renderQuestion(true);
+  }
+});
+
+quizRestart?.addEventListener("click", () => {
+  answers.fill(null);
+  currentQuestion = 0;
+
+  renderQuestion(true);
+});
+
+/* =========================================================
+   RESULTADO FINAL
+========================================================= */
+
+function showQuizResult(focus = false) {
+  const labels = quizLabels[quizLanguage()];
+
+  const score = answers.reduce((total, answer, index) => {
+    return total +
+      (answer === quizQuestions[index].correct ? 1 : 0);
+  }, 0);
+
+  quizContainer.replaceChildren();
+  quizFeedback.replaceChildren();
+
+  quizFeedback.className = "quiz-feedback";
+
+  quizNext.hidden = true;
+
+  quizPrevious.disabled = false;
+  quizPrevious.textContent = labels.previous;
+
+  quizRestart.hidden = false;
+  quizRestart.textContent = labels.restart;
+
+  quizResult.textContent = labels.result(
+    score,
+    quizQuestions.length
+  );
+
+  if (focus) {
+    quizResult.focus({ preventScroll: true });
+  }
 }
 
 /* =========================================================
@@ -1126,20 +1222,11 @@ function showQuizResult() {
 const countdownTarget =
   new Date("2026-11-04T08:00:00-03:00").getTime();
 
-const countdownDays =
-  document.getElementById("countdown-days");
-
-const countdownHours =
-  document.getElementById("countdown-hours");
-
-const countdownMinutes =
-  document.getElementById("countdown-minutes");
-
-const countdownSeconds =
-  document.getElementById("countdown-seconds");
-
-const countdownStatus =
-  document.getElementById("countdown-status");
+const countdownDays = document.getElementById("countdown-days");
+const countdownHours = document.getElementById("countdown-hours");
+const countdownMinutes = document.getElementById("countdown-minutes");
+const countdownSeconds = document.getElementById("countdown-seconds");
+const countdownStatus = document.getElementById("countdown-status");
 
 function updateCountdown() {
   if (
@@ -1151,8 +1238,7 @@ function updateCountdown() {
     return false;
   }
 
-  const remaining =
-    countdownTarget - Date.now();
+  const remaining = countdownTarget - Date.now();
 
   if (remaining <= 0) {
     countdownDays.textContent = "0";
@@ -1161,8 +1247,7 @@ function updateCountdown() {
     countdownSeconds.textContent = "0";
 
     if (countdownStatus) {
-      const lang =
-        document.documentElement.lang || "es";
+      const lang = document.documentElement.lang || "es";
 
       countdownStatus.textContent =
         translations[lang].countdownComplete;
@@ -1171,24 +1256,19 @@ function updateCountdown() {
     return true;
   }
 
-  const totalSeconds =
-    Math.floor(remaining / 1000);
+  const totalSeconds = Math.floor(remaining / 1000);
 
-  const days =
-    Math.floor(totalSeconds / 86400);
+  const days = Math.floor(totalSeconds / 86400);
 
-  const hours =
-    Math.floor(
-      (totalSeconds % 86400) / 3600
-    );
+  const hours = Math.floor(
+    (totalSeconds % 86400) / 3600
+  );
 
-  const minutes =
-    Math.floor(
-      (totalSeconds % 3600) / 60
-    );
+  const minutes = Math.floor(
+    (totalSeconds % 3600) / 60
+  );
 
-  const seconds =
-    totalSeconds % 60;
+  const seconds = totalSeconds % 60;
 
   countdownDays.textContent = String(days);
 
@@ -1222,4 +1302,53 @@ if (!updateCountdown()) {
       clearInterval(countdownTimer);
     }
   }, 1000);
+}
+
+/* =========================================================
+   NAVEGACIÓN FLOTANTE
+========================================================= */
+
+const quickNavigation =
+  document.querySelector(".quick-navigation");
+
+quickNavigation
+  ?.querySelectorAll("a")
+  .forEach((link) => {
+    link.addEventListener("click", () => {
+      quickNavigation.open = false;
+
+      document
+        .querySelector(".quick-navigation summary")
+        .focus({ preventScroll: true });
+    });
+  });
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && quickNavigation?.open) {
+    quickNavigation.open = false;
+
+    quickNavigation.querySelector("summary").focus();
+  }
+});
+
+document.addEventListener("click", (event) => {
+  if (
+    quickNavigation &&
+    !quickNavigation.contains(event.target)
+  ) {
+    quickNavigation.open = false;
+  }
+});
+
+/* Evita que el encabezado tape las secciones al navegar. */
+
+const header = document.querySelector(".site-header");
+
+if (header && typeof ResizeObserver !== "undefined") {
+  new ResizeObserver(() => {
+    document.documentElement.style.setProperty(
+      "--header-height",
+      `${header.offsetHeight}px`
+    );
+  }).observe(header);
 }
