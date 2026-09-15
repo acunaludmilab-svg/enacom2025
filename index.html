@@ -1154,18 +1154,16 @@
           <div id="quiz-container"></div>
 
 
-          <button
-            id="quiz-next"
-            class="button primary quiz-button"
-            type="button"
-            data-i18n="nextQuestion"
-          >
-            Siguiente pregunta
-          </button>
-
+          <div id="quiz-feedback" class="quiz-feedback" role="status" aria-live="polite" aria-atomic="true"></div>
+          <div class="quiz-actions">
+            <button id="quiz-previous" class="button secondary" type="button" disabled>Pregunta anterior</button>
+            <button id="quiz-next" class="button primary" type="button" disabled>Siguiente pregunta</button>
+            <button id="quiz-restart" class="button primary" type="button" hidden>Volver a intentar</button>
+          </div>
 
           <div
             id="quiz-result"
+            tabindex="-1"
             class="quiz-result"
             aria-live="polite"
           ></div>
@@ -1203,7 +1201,7 @@
 
 
             <h2 data-i18n="socialTitle">
-              ENACOM también está en redes
+              ENACOM también está en redes sociales
             </h2>
 
 
@@ -1379,6 +1377,22 @@
 
 
   <script src="script.js"></script>
+
+  <div class="floating-navigation">
+    <details class="quick-navigation">
+      <summary data-i18n="navSections">Secciones</summary>
+      <nav aria-label="Accesos rápidos">
+        <a href="#inicio" data-i18n="navHome">Inicio</a>
+        <a href="#galeria" data-i18n="navGallery">Galería</a>
+        <a href="#ejes" data-i18n="navEjes">Ejes temáticos</a>
+        <a href="#problematicas" data-i18n="navProblems">Problemáticas</a>
+        <a href="#referentes" data-i18n="navPonencias">Ponencias</a>
+        <a href="#interactivo" data-i18n="navInteractivo">Participá</a>
+        <a href="#redes" data-i18n="navRedes">Redes</a>
+      </nav>
+    </details>
+    <a class="back-to-top" href="#inicio">↑ <span data-i18n="navHome">Inicio</span></a>
+  </div>
 
 </body>
 </html>
